@@ -5,23 +5,35 @@ class BankAccount {
     String name;
     double balance;
     double dividendRate; // example: 0.05 = 5%
+    String[] transacHistory;
+    int idx;
 
     // Constructor
     public BankAccount(String name, double initialDeposit) {
         this.name = name;
         this.balance = initialDeposit;
+        this.transacHistory = new String[90];
         this.dividendRate = 0.0;
+        idx = 0;
+    }
+
+    public double getBalance() {
+        return this.balance;
     }
 
     // Deposit money
     public void deposit(double amount) {
         balance = balance + amount;
+        transacHistory[idx] = "Deposit " + amount;
+        idx++;
         // too simple - need refinement
     }
 
     // Withdraw money
     public void withdraw(double amount) {
         balance = balance - amount;
+        transacHistory[idx] = "Withdraw " + amount;
+        idx++;
         // too simple - need refinement
     }
 
@@ -34,6 +46,14 @@ class BankAccount {
     public void applyDividend() {
         double dividend = calculateDividend();
         balance = balance + dividend;
+        transacHistory[idx] = "Add Divident " + dividend;
+        idx++;
+    }
+
+    public void printTransac() {
+        for(int i=0; i<idx; i++) {
+            System.out.println(transacHistory[i]);
+        }
     }
 
     // Set dividend rate
@@ -54,6 +74,11 @@ class BankAccount {
 
 public class App {
     public static void main(String[] args) {
+        int[] finMark = { 88, 75, 60, 80, 90, 95, 77, 91, 77, 80 };
+        for (int elem:finMark) {
+            System.out.println(elem);
+        }
+
 
         Scanner sc = new Scanner(System.in);
 
@@ -68,10 +93,66 @@ public class App {
 
         // Create account
         BankAccount acc1 = new BankAccount(name, initialDeposit);
+        BankAccount a2 = new BankAccount("Ali", 10);
+        BankAccount a3 = new BankAccount("Bali", 10);
+        BankAccount a4 = new BankAccount("Cali", 10);
+        BankAccount a5 = new BankAccount("Dali", 10);
+
+        System.out.println(acc1);
+        System.out.println(a2);
+        System.out.println(a3);
+        a3.applyDividend();
+        a3.printObjectState();
+
+        BankAccount[] accArr;
+        accArr = new BankAccount[7];
+        System.out.println(accArr[0]);
+        System.out.println(accArr[1]);
+        System.out.println(accArr[2]);
+        System.out.println(accArr[3]);
+        System.out.println(accArr[4]);
+        System.out.println(accArr[5]);
+
+        accArr[0] = acc1;
+        accArr[1] = a2;
+        accArr[2] = a3;
+        accArr[3] = new BankAccount("Siti", 500);
+        accArr[4] = new BankAccount("Siva", 100);
+        accArr[5] = a4;
+        accArr[6] = a5;
+
+        accArr[3].deposit(700);
+
+        accArr[4].withdraw(50);
+
+        for(int i = 0; i < 7; i++) { // print info - 
+            accArr[i].printObjectState();
+        }
+
+        for( int i = 0; i < 7; i++) {
+            accArr[i].setDividendRate(0.075);
+            accArr[i].applyDividend();
+        }
+
+         for(int i = 0; i < 7; i++) { // print info - 
+            accArr[i].printObjectState();
+        }
+
+        double highest = accArr[0].getBalance();
+        int highestNo = 0;
+        for(int i = 0; i < 7; i++) {
+            if(accArr[i].getBalance() > highest) {
+                highestNo = i;
+                highest = accArr[i].getBalance();
+            }
+        }
+
+        System.out.println("Print account with highest balance");
+        accArr[highestNo].printObjectState();
+
 
         System.out.println("\nAccount created successfully.");
-        acc1.printObjectState();
-
+/* 
         // Deposit
         System.out.println("----- DEPOSIT -----");
         System.out.print("Enter deposit amount: RM ");
@@ -93,7 +174,10 @@ public class App {
         acc1.setDividendRate(rate);
         acc1.applyDividend();
 
-        acc1.printObjectState();
+        acc1.printObjectState(); */
+        accArr[0].deposit(200);
+        accArr[0].withdraw(100);
+        accArr[0].printTransac();
 
         System.out.println("===== END OF PROGRAM =====");
 
